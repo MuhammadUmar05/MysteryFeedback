@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Mystery Feedback
 
-## Getting Started
+Mystery Feedback is a full stack anonymous messaging platform built with modern web technologies.
+It allows users to create a public profile link and receive anonymous messages securely without exposing their identity.
 
-First, run the development server:
+The project focuses on clean architecture, real world authentication flows and scalable API design.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Mystery Feedback enables anyone to share a personal profile link and receive honest anonymous feedback.
+Visitors can send messages without logging in.
+Profile owners manage messages through a protected dashboard.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technology Stack
 
-## Learn More
+1. Next.js 14 App Router
+1. TypeScript
+1. Tailwind CSS
+1. ShadCN UI
+1. NextAuth Authentication
+1. MongoDB with Mongoose
+1. Zod validation
+1. Axios API client
+1. Gemini API based message suggestions
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Application Flow
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Users register and verify their email
+* Each user receives a unique public profile link
+* Anyone can send anonymous messages using that link
+* Users log in to their dashboard
+* Users can enable or disable message receiving
+* Users can delete messages securely
+* AI suggestions help visitors write meaningful feedback
