@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { signIn, useSession } from "next-auth/react";
 
 import {
   Form,
@@ -20,12 +19,11 @@ import { Input } from "@/components/ui/input";
 import { Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signInSchema } from "@/schemas/signInSchema";
+import { signIn } from "next-auth/react";
 
-const Page = () => {
+const page = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const { data: session } = useSession();
-
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -33,14 +31,6 @@ const Page = () => {
       password: "",
     },
   });
-
-  // Redirect if session exists
-  useEffect(() => {
-    if (session) {
-      router.replace("/dashboard");
-    }
-  }, [session, router]);
-
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     setIsSubmitting(true);
     const result = await signIn("credentials", {
@@ -49,12 +39,12 @@ const Page = () => {
       password: data.password,
     });
     setIsSubmitting(false);
-
     if (result?.error) {
       toast.error("Sign In Failed, Please try again");
     } else {
       toast.success("Sign In Successfully");
-      // Remove router.replace here, session effect will handle navigation
+      router.replace("/dashboard");
+      router.refresh()
     }
   };
 
@@ -62,7 +52,9 @@ const Page = () => {
     <div className="min-h-screen w-full overflow-hidden flex justify-center items-center bg-gray-100">
       <div className="w-full max-w-md m-4 p-8 bg-white shadow-md border-2 rounded-xl space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-black">Welcome Back to Mystery Feedback</h1>
+          <h1 className="text-4xl font-black">
+            Welcome Back to Mystery Feedback
+          </h1>
           <p className="capitalize text-lg mt-4">
             Sign In to start sending anonymous messages
           </p>
@@ -76,7 +68,11 @@ const Page = () => {
                 <FormItem>
                   <FormLabel>Email/Username</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="ex. johndoe@email.com" {...field} />
+                    <Input
+                      type="text"
+                      placeholder="ex. johndoe@email.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -89,7 +85,11 @@ const Page = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="**********" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="**********"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -98,7 +98,9 @@ const Page = () => {
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2Icon className="animate-spin aspect-square" /> Processing
+                  {" "}
+                  <Loader2Icon className="animate-spin aspect-square" />{" "}
+                  Processing
                 </>
               ) : (
                 "Sign In"
@@ -108,7 +110,7 @@ const Page = () => {
         </Form>
         <div className="text-center mt-4">
           Don't have an account?{" "}
-          <Link className="text-blue-600 hover:text-blue-800" href="/sign-up">
+          <Link className="text-blue-600 hover:text-blue-800" href={"/sign-up"}>
             Sign Up
           </Link>
         </div>
@@ -117,4 +119,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default page;
