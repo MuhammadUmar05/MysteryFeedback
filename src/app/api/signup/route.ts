@@ -65,6 +65,7 @@ export async function POST(request: NextRequest) {
       email,
       verifyCode
     );
+    console.log("email sent route")
     if (!emailResponse.success) {
       return NextResponse.json(
         {

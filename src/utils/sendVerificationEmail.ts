@@ -1,21 +1,31 @@
-import { resend } from "@/lib/resend";
-import VerificationEmail from "../../emails/VerificationEmail";
-import { ApiResponse } from "@/types/ApiResponse";
+import nodemailer from "nodemailer";
+
 export const sendVerificationEmail = async (
   username: string,
   email: string,
   verifyCode: string
-): Promise<ApiResponse> => {
+) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.GMAIL_USER, 
+      pass: process.env.GMAIL_PASS,
+    },
+  });
+
   try {
-    resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: email,
-      subject: "Mystery Feedback Verification Code",
-      react: VerificationEmail({ username, otp: verifyCode }),
+    await transporter.sendMail({
+      from: `"Mystery Feedback" <${process.env.GMAIL_USER}>`,
+      to: email, 
+      subject: "Verification Code",
+      text: `Hello ${username}, your code is ${verifyCode}`,
+      html: `<b>Hello ${username}, your code is ${verifyCode}</b>`,
+      
     });
-    return { success: true, message: "verification email sent successfully" };
+
+    return { success: true, message: "Email sent!" };
   } catch (error) {
-    console.log("error sending verification email", error);
-    return { success: false, message: "failed to send verification email" };
+    console.error("Nodemailer error:", error);
+    return { success: false, message: "Failed to send email" };
   }
 };
